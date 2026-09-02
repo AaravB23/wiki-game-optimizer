@@ -8,12 +8,22 @@ email = os.getenv("EMAIL")
 
 async def main():
     wiki = wikiapi.AsyncWikipedia(
-            user_agent="WikiRabbitHole (%s)" % email, language='en')
-    page_py = wiki.page('ASCC1')
-    print("Page - Exists: %s" % await page_py.exists())
+            user_agent="wiki-game-optimizer (%s)" % email, language='en')
 
-    links = await page_py.links
+    print("Enter exactly the name of the starting Wikipedia page: ")
+    start_pg = wiki.page(input())
+    print("Enter exactly the name of the ending Wikipedia page: ")
+    end_pg = wiki.page(input())
+
+    if(not await start_pg.exists()):
+        print("Starting wiki page not found.")
+        return
+    if(not await end_pg.exists()):
+        print("Ending wiki page not found.") 
+        return
+    
+    links = await start_pg.links
     for title in sorted(links.keys()):
-        print("%s: %s" % (title, links[title]))        
+        print("%s: %s" % (title, links[title]))
 
 asyncio.run(main())
